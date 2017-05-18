@@ -15,6 +15,7 @@ public class RotateBitmapView extends View {
     private int time = 0,w,h;
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Bitmap bitmap;
+    private RotateBitmap rotateBitmap;
     public RotateBitmapView(Context context,Bitmap bitmap) {
         super(context);
         this.bitmap = bitmap;
@@ -24,8 +25,14 @@ public class RotateBitmapView extends View {
             w = canvas.getWidth();
             h = canvas.getHeight();
             bitmap = Bitmap.createScaledBitmap(bitmap,w/3,w/3,true);
+            rotateBitmap = new RotateBitmap();
         }
+        rotateBitmap.draw(canvas);
         time++;
+    }
+    public void uodate(float factor) {
+        rotateBitmap.update(factor);
+        postInvalidate();
     }
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
