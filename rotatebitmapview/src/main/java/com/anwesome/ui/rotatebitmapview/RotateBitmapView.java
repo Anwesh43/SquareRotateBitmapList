@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -31,5 +32,27 @@ public class RotateBitmapView extends View {
 
         }
         return true;
+    }
+    private class RotateBitmap {
+        private float deg = 0;
+        public void draw(Canvas canvas) {
+            canvas.save();
+            Path path = new Path();
+            for(int i=-90;i<-90+deg;i++) {
+                float x = w/2+w/6*(float)Math.cos(i*Math.PI/180),y = h/2+w/6*(float)Math.sin(i*Math.PI/180);
+                if(i == -90) {
+                    path.moveTo(x,y);
+                }
+                else {
+                    path.lineTo(x,y);
+                }
+            }
+            canvas.clipPath(path);
+            canvas.drawBitmap(bitmap,w/2-bitmap.getWidth()/2,h/2-bitmap.getHeight()/2,paint);
+            canvas.restore();
+        }
+        public void update(float facotor) {
+            deg = 360*facotor;
+        }
     }
 }
