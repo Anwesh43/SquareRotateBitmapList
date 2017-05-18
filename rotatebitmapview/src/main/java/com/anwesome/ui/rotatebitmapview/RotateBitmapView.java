@@ -1,5 +1,8 @@
 package com.anwesome.ui.rotatebitmapview;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,6 +19,7 @@ public class RotateBitmapView extends View {
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Bitmap bitmap;
     private RotateBitmap rotateBitmap;
+    private AnimationHandler animationHandler = new AnimationHandler();
     public RotateBitmapView(Context context,Bitmap bitmap) {
         super(context);
         this.bitmap = bitmap;
@@ -30,13 +34,13 @@ public class RotateBitmapView extends View {
         rotateBitmap.draw(canvas);
         time++;
     }
-    public void uodate(float factor) {
+    public void update(float factor) {
         rotateBitmap.update(factor);
         postInvalidate();
     }
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
-
+            animationHandler.start();
         }
         return true;
     }
@@ -60,6 +64,38 @@ public class RotateBitmapView extends View {
         }
         public void update(float facotor) {
             deg = 360*facotor;
+        }
+    }
+    private class AnimationHandler extends AnimatorListenerAdapter implements ValueAnimator.AnimatorUpdateListener {
+        private int dir = 0;
+        private boolean isAnimating = false;
+        private ValueAnimator startAnim = ValueAnimator.ofFloat(0,1),endAnim = ValueAnimator.ofFloat(1,0);
+        public AnimationHandler() {
+            startAnim.addUpdateListener(this);
+            endAnim.addUpdateListener(this);
+            endAnim.addListener(this);
+            startAnim.addListener(this);
+            startAnim.setDuration(500);
+            endAnim.setDuration(500);
+        }
+        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+            update((float)valueAnimator.getAnimatedValue());
+        }
+        public void onAnimationEnd(Animator animator) {
+            if(isAnimating) {
+                isAnimating = false;
+            }
+        }
+        public void start() {
+            if (!isAnimating) {
+                if (dir == 0) {
+                    startAnim.start();
+                } else {
+                    endAnim.start();
+                }
+                dir = dir == 0 ? 1 : 0;
+                isAnimating = true;
+            }
         }
     }
 }
