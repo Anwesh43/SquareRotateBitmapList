@@ -50,10 +50,16 @@ public class RotateBitmapView extends View {
         private float deg = 0;
         public void draw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
+            paint.setColor(Color.GRAY);
+            paint.setStrokeWidth(w/50);
+            paint.setStyle(Paint.Style.STROKE);
+            canvas.drawRect(new RectF(w/2-w/6,h/2-w/6,w/2+w/6,h/2+w/6),paint);
             canvas.save();
+            canvas.translate(w/2,h/2);
             Path path = new Path();
-            for(int i=-90;i<-90+deg;i++) {
-                float x = w/2+w/6*(float)Math.cos(i*Math.PI/180),y = h/2+w/6*(float)Math.sin(i*Math.PI/180);
+            for(float i=0;i<=deg;i++) {
+                float r = w/(3*(float)Math.sqrt(2));
+                float x = (float)(r*Math.cos(i*Math.PI/180)),y = (float)(r*Math.sin(i*Math.PI/180));
                 if(i == -90) {
                     path.moveTo(x,y);
                 }
@@ -62,11 +68,8 @@ public class RotateBitmapView extends View {
                 }
             }
             canvas.clipPath(path);
-            paint.setColor(Color.GRAY);
-            paint.setStyle(Paint.Style.STROKE);
-            canvas.drawRect(new RectF(w/2-w/6,h/2-w/6,w/2+w/3,h/2+w/3),paint);
             paint.setStyle(Paint.Style.FILL);
-            canvas.drawBitmap(bitmap,w/2-bitmap.getWidth()/2,h/2-bitmap.getHeight()/2,paint);
+            canvas.drawBitmap(bitmap,-bitmap.getWidth()/2,-bitmap.getHeight()/2,paint);
             canvas.restore();
         }
         public void update(float facotor) {
