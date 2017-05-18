@@ -6,8 +6,10 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -47,6 +49,7 @@ public class RotateBitmapView extends View {
     private class RotateBitmap {
         private float deg = 0;
         public void draw(Canvas canvas) {
+            canvas.drawColor(Color.WHITE);
             canvas.save();
             Path path = new Path();
             for(int i=-90;i<-90+deg;i++) {
@@ -59,6 +62,10 @@ public class RotateBitmapView extends View {
                 }
             }
             canvas.clipPath(path);
+            paint.setColor(Color.GRAY);
+            paint.setStyle(Paint.Style.STROKE);
+            canvas.drawRect(new RectF(w/2-w/6,h/2-w/6,w/2+w/3,h/2+w/3),paint);
+            paint.setStyle(Paint.Style.FILL);
             canvas.drawBitmap(bitmap,w/2-bitmap.getWidth()/2,h/2-bitmap.getHeight()/2,paint);
             canvas.restore();
         }
