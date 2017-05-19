@@ -37,9 +37,9 @@ public class ListLayout extends ViewGroup{
         for(int i=0;i<getChildCount();i++) {
             View child = getChildAt(i);
             measureChild(child,wspec,hspec);
-            newH += child.getMeasuredWidth() + h/40;
+            newH += child.getMeasuredHeight() + h/40;
         }
-        setMeasuredDimension(w,Math.max(newH+h/10,h));
+        setMeasuredDimension(w,Math.max(newH+h/5,h));
     }
     public void onLayout(boolean reloaded,int a,int b,int w,int h) {
         int x = w/20,y = w/40;

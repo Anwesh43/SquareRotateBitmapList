@@ -41,7 +41,8 @@ public class RotateBitmapView extends View {
         postInvalidate();
     }
     public boolean onTouchEvent(MotionEvent event) {
-        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+        float x = event.getX(),y = event.getY();
+        if(event.getAction() == MotionEvent.ACTION_DOWN && x>=w/2-w/5 && x<=w/2+w/5 && y>=h/2-w/5 && y<=h/2+w/5) {
             animationHandler.start();
         }
         return true;
