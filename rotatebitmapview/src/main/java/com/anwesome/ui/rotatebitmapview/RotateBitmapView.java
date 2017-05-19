@@ -17,7 +17,7 @@ import android.view.View;
  * Created by anweshmishra on 19/05/17.
  */
 public class RotateBitmapView extends View {
-    private int time = 0,w,h;
+    private int time = 0,w,h,size;
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Bitmap bitmap;
     private RotateBitmap rotateBitmap;
@@ -30,8 +30,10 @@ public class RotateBitmapView extends View {
         if(time == 0) {
             w = canvas.getWidth();
             h = canvas.getHeight();
-            bitmap = Bitmap.createScaledBitmap(bitmap,w/3,w/3,true);
+            size = w/3;
+            bitmap = Bitmap.createScaledBitmap(bitmap,2*size,2*size,true);
             rotateBitmap = new RotateBitmap();
+
         }
         rotateBitmap.draw(canvas);
         time++;
@@ -42,7 +44,7 @@ public class RotateBitmapView extends View {
     }
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX(),y = event.getY();
-        if(event.getAction() == MotionEvent.ACTION_DOWN && x>=w/2-w/5 && x<=w/2+w/5 && y>=h/2-w/5 && y<=h/2+w/5) {
+        if(event.getAction() == MotionEvent.ACTION_DOWN && x>=w/2-size && x<=w/2+size && y>=h/2-size && y<=h/2+size) {
             animationHandler.start();
         }
         return true;
@@ -54,12 +56,12 @@ public class RotateBitmapView extends View {
             paint.setColor(Color.GRAY);
             paint.setStrokeWidth(w/50);
             paint.setStyle(Paint.Style.STROKE);
-            canvas.drawRect(new RectF(w/2-w/6,h/2-w/6,w/2+w/6,h/2+w/6),paint);
+            canvas.drawRect(new RectF(w/2-size,h/2-size,w/2+size,h/2+size),paint);
             canvas.save();
             canvas.translate(w/2,h/2);
             Path path = new Path();
             for(float i=0;i<=deg;i++) {
-                float r = w/(3*(float)Math.sqrt(2));
+                float r = 2*w/(3*(float)Math.sqrt(2));
                 float x = (float)(r*Math.cos(i*Math.PI/180)),y = (float)(r*Math.sin(i*Math.PI/180));
                 if(i == -90) {
                     path.moveTo(x,y);
