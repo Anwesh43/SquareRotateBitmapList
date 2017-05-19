@@ -12,7 +12,7 @@ import android.view.ViewGroup;
  * Created by anweshmishra on 19/05/17.
  */
 public class ListLayout extends ViewGroup{
-    private int time = 0,w,h;
+    private int w,h;
     public ListLayout(Context context){
         super(context);
         initDimension(context);
@@ -39,14 +39,14 @@ public class ListLayout extends ViewGroup{
             measureChild(child,wspec,hspec);
             newH += child.getMeasuredWidth() + h/40;
         }
-        setMeasuredDimension(w,Math.max(newH,h));
+        setMeasuredDimension(w,Math.max(newH+h/10,h));
     }
     public void onLayout(boolean reloaded,int a,int b,int w,int h) {
         int x = w/20,y = w/40;
         for(int i=0;i<getChildCount();i++) {
             View child = getChildAt(i);
-            child.layout(x,y,x+9*w/10,y);
-            y += 9*w/10;
+            child.layout(x,y,x+child.getMeasuredWidth(),y+child.getMeasuredHeight());
+            y += child.getMeasuredHeight()+h/40;
         }
     }
 }
